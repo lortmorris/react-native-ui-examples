@@ -1,23 +1,66 @@
-import React from 'react';
-
-export Tab from './Tab';
-
-import styles from './tabs.styles';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
 
 import {
   View,
+  FlatList,
 } from 'react-native';
+
+import createStyles from './base.styles';
+
+import Tab from './Tab';
+import TabContent from './TabContent';
+import TabItem from './TabItem';
+import TabContentItem from './TabContentItem';
 
 function Tabs({
   children,
+  styles = {},
 }) {
-  console.info('chiildren: ', children);
+  const [current, setCurrent] = useState(0);
+
+  const tabs = children.filter((f) => (f.type === Tab));
+  const content = children.filter((f) => (f.type === TabContent));
+  const currentStyles = createStyles(styles);
+  useEffect(() => {
+    setCurrent(0);
+  }, []);
 
   return (
-    <View style={styles.container}>
-      {children}
+    <View style={currentStyles.container}>
+      <View style={{ height: 30 }}>
+        <FlatList
+          data={tabs}
+          renderItem={({ item, index }) => (
+            <TabItem
+              onPress={() => setCurrent(index)}
+              selected={current === index}
+              styles={{ ...currentStyles }}
+            >
+              {item}
+            </TabItem>
+          )}
+          keyExtractor={(item) => item.children}
+          horizontal
+        />
+      </View>
+      <View>
+        {
+          content.map((draw, i) => (
+            <TabContentItem component={draw} visible={i === current}>
+              {draw}
+            </TabContentItem>
+          ))
+        }
+      </View>
     </View>
-  )
+  );
 }
 
-export default Tabs;
+export {
+  Tabs,
+  Tab,
+  TabContent,
+};

@@ -1,19 +1,14 @@
 import React from 'react';
 import {
-  View,
   Text,
 } from 'react-native';
 
-import styles from './tab.styles';
-
 function Tab({
-  children
+  children,
 }) {
   return (
-    <View styles={styles.tab}>
-      <Text>{children}</Text>
-    </View>
-  )
+    <Text>{children}</Text>
+  );
 }
 
 export default Tab;

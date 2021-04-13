@@ -4,37 +4,47 @@ import React, {
 } from 'react';
 
 import {
-  StyleSheet,
   Text,
   View,
   Animated,
 } from 'react-native';
+
 import { StatusBar } from 'expo-status-bar';
 
-import Tabs, { Tab } from './components/Tabs';
+import {
+  Tabs,
+  Tab,
+  TabContent,
+} from './components/Tabs';
 
-function FadeInView ({
+import RestaurantContent from './components/RestaurantContent';
+import MercadosContent from './components/MercadosContent';
+import DrinksContent from './components/DrinksContent';
+
+import styles from './styles';
+
+function FadeInView({
   style,
-  children
+  children,
 }) {
   const [fadeAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
-    Animated.timing(                  // Animate over time
-      fadeAnim,            // The animated value to drive
+    Animated.timing(
+      fadeAnim,
       {
-        toValue: 1,                   // Animate to opacity: 1 (opaque)
-        duration: 2000,              // Make it take a while
+        toValue: 1,
+        duration: 2000,
         useNativeDriver: true,
-      }
+      },
     ).start();
   });
 
   return (
-    <Animated.View                 // Special animatable View
+    <Animated.View
       style={{
         ...style,
-        opacity: fadeAnim,         // Bind opacity to animated value
+        opacity: fadeAnim,
       }}
     >
       {children}
@@ -44,25 +54,55 @@ function FadeInView ({
 
 export default function App() {
   return (
-      <View style={styles.container}>
-        <FadeInView>
-          <Text>Open up App.js to start working on your app!</Text>
-          <Tabs>
-            <Tab>Restaurantes</Tab>
-            <Tab>Mercados</Tab>
-            <Tab>Bebidas alcólicas</Tab>
-          </Tabs>
-          <StatusBar style="auto" />
-        </FadeInView>
-      </View>
+    <View style={styles.container}>
+      <FadeInView>
+        <Text>Select the next options</Text>
+        <Tabs
+          styles={{
+            container: {
+              backgroundColor: '#efefef',
+            },
+          }}
+        >
+          <Tab>Restaurantes</Tab>
+          <Tab>Mercados</Tab>
+          <Tab>Bebidas alcoholicas</Tab>
+          <Tab>Restaurantes</Tab>
+          <Tab>Mercados</Tab>
+          <Tab>Bebidas alcoholicas</Tab>
+          <Tab>Restaurantes</Tab>
+          <Tab>Mercados</Tab>
+          <Tab>Bebidas alcoholicas</Tab>
+          <TabContent>
+            <RestaurantContent />
+          </TabContent>
+          <TabContent>
+            <MercadosContent />
+          </TabContent>
+          <TabContent>
+            <DrinksContent />
+          </TabContent>
+          <TabContent>
+            <RestaurantContent />
+          </TabContent>
+          <TabContent>
+            <MercadosContent />
+          </TabContent>
+          <TabContent>
+            <DrinksContent />
+          </TabContent>
+          <TabContent>
+            <RestaurantContent />
+          </TabContent>
+          <TabContent>
+            <MercadosContent />
+          </TabContent>
+          <TabContent>
+            <DrinksContent />
+          </TabContent>
+        </Tabs>
+        <StatusBar style="dark" />
+      </FadeInView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
