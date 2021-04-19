@@ -6,6 +6,7 @@ import React, {
 import {
   View,
   FlatList,
+  ScrollView,
 } from 'react-native';
 
 import createStyles from './base.styles';
@@ -18,15 +19,30 @@ import TabContentItem from './TabContentItem';
 function Tabs({
   children,
   styles = {},
+  pure,
 }) {
   const [current, setCurrent] = useState(0);
 
-  const tabs = children.filter((f) => (f.type === Tab));
+  const tabs = children.filter((f) => (f.type === Tab)).map((tab) => ({ ...tab, _id: String(Math.random()) }));
   const content = children.filter((f) => (f.type === TabContent));
   const currentStyles = createStyles(styles);
   useEffect(() => {
     setCurrent(0);
   }, []);
+
+  function renderTabsContent() {
+    return (
+      <View>
+        {
+          content.map((draw, i) => (
+            <TabContentItem key={`$TABS-Index${i}`} component={draw} visible={i === current}>
+              {draw}
+            </TabContentItem>
+          ))
+        }
+      </View>
+    );
+  }
 
   return (
     <View style={currentStyles.container}>
@@ -42,19 +58,15 @@ function Tabs({
               {item}
             </TabItem>
           )}
-          keyExtractor={(item) => item.children}
+          keyExtractor={(item) => item._id}
           horizontal
         />
       </View>
-      <View>
-        {
-          content.map((draw, i) => (
-            <TabContentItem component={draw} visible={i === current}>
-              {draw}
-            </TabContentItem>
-          ))
-        }
-      </View>
+      {pure ? renderTabsContent() : (
+        <ScrollView>
+          {renderTabsContent()}
+        </ScrollView>
+      )}
     </View>
   );
 }
